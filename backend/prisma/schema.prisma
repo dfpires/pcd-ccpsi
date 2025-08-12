@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// define o modelo de dados Empresa
+model Empresa {
+  id Int @id @default(autoincrement())
+  nome String
+  email String @unique
+}
+
+model TipoDeficiencia {
+  id        Int                   @id @default(autoincrement())
+  nome      String                @unique
+  subtipos  SubtipoDeficiencia[]
+  createdAt DateTime              @default(now())
+  updatedAt DateTime              @updatedAt
+}
+
+model SubtipoDeficiencia {
+  id         Int                  @id @default(autoincrement())
+  nome       String
+  tipoId     Int
+  tipo       TipoDeficiencia      @relation(fields: [tipoId], references: [id], onDelete: Cascade)
+  barreiras  SubtipoBarreira[]
+  createdAt  DateTime             @default(now())
+  updatedAt  DateTime             @updatedAt
+
+  @@unique([tipoId, nome]) // evita subtipo duplicado dentro do mesmo tipo
+}
+
+// tabelas de junção explícitas (para fácil evolução)
+model SubtipoBarreira {
+  subtipoId  Int
+  barreiraId Int
+  subtipo    SubtipoDeficiencia @relation(fields: [subtipoId], references: [id], onDelete: Cascade)
+  barreira   Barreira           @relation(fields: [barreiraId], references: [id], onDelete: Cascade)
+
+  @@id([subtipoId, barreiraId])
+  @@index([barreiraId])
+}
+
+model Barreira {
+  id               Int                      @id @default(autoincrement())
+  descricao        String                   @unique
+  subtipos         SubtipoBarreira[]
+  acessibilidades  BarreiraAcessibilidade[]
+  createdAt        DateTime                 @default(now())
+  updatedAt        DateTime                 @updatedAt
+}
+
+model BarreiraAcessibilidade {
+  barreiraId       Int
+  acessibilidadeId Int
+  barreira         Barreira        @relation(fields: [barreiraId], references: [id], onDelete: Cascade)
+  acessibilidade   Acessibilidade  @relation(fields: [acessibilidadeId], references: [id], onDelete: Cascade)
+
+  @@id([barreiraId, acessibilidadeId])
+  @@index([acessibilidadeId])
+}
+
+model Acessibilidade {
+  id               Int                      @id @default(autoincrement())
+  descricao        String                   @unique
+  barreiras        BarreiraAcessibilidade[]
+  createdAt        DateTime                 @default(now())
+  updatedAt        DateTime                 @updatedAt
+}
