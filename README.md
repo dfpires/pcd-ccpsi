@@ -1,6 +1,6 @@
-npm install
-npx prisma init
-npx prisma migrate dev --name init
-npx prisma generate
-npm i -D tsx
-npm run seed
+npm install </br>
+npx prisma init </br>
+npx prisma migrate dev --name init </br>
+npx prisma generate </br>
+npm i -D tsx </br>
+npm run seed </br>
