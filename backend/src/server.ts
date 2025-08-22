@@ -80,6 +80,80 @@ app.get("/subtipos/:id", async (req, res) => {
   });
 });
 
+/** 6. Cria um tipo */
+app.post("/tipos", async (req, res) => {
+  const { nome } = req.body as { nome?: string };
+  if (!nome || nome.trim() === "") {
+    return res.status(400).json({ error: "O campo 'nome' é obrigatório" });
+  }
+  try {
+    const tipo = await prisma.tipoDeficiencia.create({
+      data: { nome: nome.trim() },
+    });
+    res.status(201).json(tipo);
+  } catch (err) {
+    res.status(500).json({ error: "Erro ao criar tipo", details: err });
+  }
+});
+
+/** 7. Cria um subtipo */
+app.post("/subtipos", async (req, res) => {
+  const { nome, tipoId } = req.body as { nome?: string; tipoId?: number };
+  if (!nome || !tipoId) {
+    return res.status(400).json({ error: "Campos 'nome' e 'tipoId' são obrigatórios" });
+  }
+  try {
+    // Verifica se o tipo existe
+    const tipo = await prisma.tipoDeficiencia.findUnique({ where: { id: Number(tipoId) } });
+    if (!tipo) {
+      return res.status(404).json({ error: "Tipo não encontrado" });
+    }
+    const subtipo = await prisma.subtipoDeficiencia.create({
+      data: { nome: nome.trim(), tipoId: Number(tipoId) },
+    });
+    res.status(201).json(subtipo);
+  } catch (err) {
+    res.status(500).json({ error: "Erro ao criar subtipo", details: err });
+  }
+});
+
+/** 8. Cria uma barreira */
+app.post("/barreiras", async (req, res) => {
+  const { descricao } = req.body as { descricao?: string };
+  if (!descricao || descricao.trim() === "") {
+    return res.status(400).json({ error: "O campo 'descricao' é obrigatório" });
+  }
+  try {
+    const barreira = await prisma.barreira.create({
+      data: { descricao: descricao.trim() },
+    });
+    res.status(201).json(barreira);
+  } catch (err) {
+    res.status(500).json({ error: "Erro ao criar barreira", details: err });
+  }
+});
+
+/** 10) Vincular barreiras a um subtipo (N:N) */
+app.post("/subtipos/:id/barreiras", async (req, res) => {
+  const subtipoId = Number(req.params.id);
+  const { barreiraIds } = req.body as { barreiraIds: number[] };
+
+  if (!Array.isArray(barreiraIds) || barreiraIds.length === 0) {
+    return res.status(400).json({ error: "barreiraIds deve ser um array com pelo menos 1 id" });
+  }
+
+  // valida existência
+  const subtipo = await prisma.subtipoDeficiencia.findUnique({ where: { id: subtipoId } });
+  if (!subtipo) return res.status(404).json({ error: "Subtipo não encontrado" });
+
+  await prisma.subtipoBarreira.createMany({
+    data: barreiraIds.map((barreiraId) => ({ subtipoId, barreiraId })),
+    skipDuplicates: true,
+  });
+
+  res.json({ ok: true });
+});
+
 
 /** middleware básico de erro */
 app.use((err: any, _req: any, res: any, _next: any) => {
