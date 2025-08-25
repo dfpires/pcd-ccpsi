@@ -1,7 +1,5 @@
 import { Router } from "express";
-
 import { TiposController } from "../controllers/tipos.controller";
-
 const router = Router();
 
 router.get("/", TiposController.list);                 // /tipos

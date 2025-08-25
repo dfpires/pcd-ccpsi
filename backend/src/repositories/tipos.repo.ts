@@ -1,6 +1,4 @@
 import { prisma } from "./prisma";
-// exportando um objeto TiposRepo, que contém as funções
-// list, listWithSutipos, create e findById
 
 export const TiposRepo = {
   list() {
