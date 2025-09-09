@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { api } from "../lib/api";
 import type { TipoComSubtipos } from "../types";
 import SubtipoList from "../components/SubtipoList";
+import SubtipoForm from "../components/SubtipoForm";
 
 export default function SubtiposPage() {
   const [tipos, setTipos] = useState<TipoComSubtipos[]>([]);
@@ -32,6 +33,7 @@ export default function SubtiposPage() {
         <p className="text-gray-600">Crie subtipos e consulte por tipo.</p>
       </header>
 
+      <SubtipoForm pedro={carregar}/>
       {
       loading ? (
         <div className="card">Carregando...</div>

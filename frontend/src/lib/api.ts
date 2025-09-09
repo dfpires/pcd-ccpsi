@@ -1,4 +1,4 @@
-import type { TipoComSubtipos, TipoDeficiencia } from "../types";
+import type { SubtipoDeficiencia, TipoComSubtipos, TipoDeficiencia } from "../types";
 
 const BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
 
@@ -34,6 +34,13 @@ export const api = {
   // GET /subtipos → seu backend retorna Tipos com seus subtipos
   listarTiposComSubtipos(): Promise<TipoComSubtipos[]> {
     return http("/tipos/com-subtipos");
+  },
+// POST /subtipos { nome, tipoId }
+  criarSubtipo(nome: string, tipoId: number): Promise<SubtipoDeficiencia> {
+    return http("/subtipos", {
+      method: "POST",
+      body: JSON.stringify({ nome, tipoId }),
+    });
   },
 
 };
