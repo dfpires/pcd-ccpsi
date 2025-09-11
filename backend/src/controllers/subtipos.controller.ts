@@ -2,6 +2,10 @@ import { Request, Response } from "express";
 import { SubtiposService } from "../services/subtipos.service";
 
 export const SubtiposController = {
+  async list(_req: Request, res: Response) {
+      const data = await SubtiposService.list();
+      res.json(data);
+    },
   async getOne(req: Request, res: Response) {
     const id = Number(req.params.id);
     const data = await SubtiposService.findDeep(id);

@@ -1,11 +1,14 @@
 import { prisma } from "./prisma";
 
 export const SubtiposRepo = {
-  findById(id: number) {
-    return prisma.subtipoDeficiencia.findUnique({ where: { id } });
+  list() {
+    return prisma.subtipoDeficiencia.findMany({ orderBy: { id: "asc" } });
   },
-
-  // usado pelo GET /subtipos/:id (com joins + ordenações)
+  findById(id: number) {
+    return prisma.subtipoDeficiencia.findUnique({ 
+      where: { id } });
+  },
+   // usado pelo GET /subtipos/:id (com joins + ordenações)
   findDeepById(id: number) {
     return prisma.subtipoDeficiencia.findUnique({
       where: { id },

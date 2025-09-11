@@ -8,6 +8,7 @@ import tiposRoutes from "./routes/tipos.routes";
 import subtiposRoutes from "./routes/subtipos.routes";
 import barreirasRoutes from "./routes/barreiras.routes";
 import acessibilidadesRoutes from "./routes/acessibilidades.routes";
+import vinculosRoutes from "./routes/vinculos.routes"
 
 const app = express();
 const prisma = new PrismaClient();
@@ -17,6 +18,7 @@ app.use(express.json());
 // usa os módulos de rotas
 app.use("/tipos", tiposRoutes);
 app.use("/subtipos", subtiposRoutes);
+app.use("/vinculos", vinculosRoutes)
 app.use("/barreiras", barreirasRoutes);
 app.use("/acessibilidades", acessibilidadesRoutes);
 

@@ -2,6 +2,10 @@ import { SubtiposRepo } from "../repositories/subtipos.repo";
 import { TiposRepo } from "../repositories/tipos.repo";
 
 export const SubtiposService = {
+   list() {
+    return TiposRepo.list();
+  },
+  
   async findDeep(id: number) {
     const subtipo = await SubtiposRepo.findDeepById(id);
     if (!subtipo) throw Object.assign(new Error("Subtipo não encontrado"), { status: 404 });
