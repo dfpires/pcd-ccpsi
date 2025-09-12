@@ -4,6 +4,7 @@ import AdminPage from "./pages/AdminPage";
 // já existentes
 import TiposPage from "./pages/TiposPage";
 import SubtiposPage from "./pages/SubtiposPage";
+import BarreirasPage from "./pages/BarreirasPage";
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="/admin" element={<AdminPage />}>
           <Route path="tipos" element={<TiposPage />} />
           <Route path="subtipos" element={<SubtiposPage />} />
+          <Route path="barreiras" element={<BarreirasPage />} />
         </Route>
 
         {/* 404 simples */}

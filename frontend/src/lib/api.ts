@@ -1,4 +1,4 @@
-import type { SubtipoDeficiencia, TipoComSubtipos, TipoDeficiencia } from "../types";
+import type { Barreira, SubtipoDeficiencia, TipoComSubtipos, TipoDeficiencia } from "../types";
 
 const BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
 
@@ -40,6 +40,24 @@ export const api = {
     return http("/subtipos", {
       method: "POST",
       body: JSON.stringify({ nome, tipoId }),
+    });
+  },
+  listarBarreiras(): Promise<Barreira[]> {
+    return http("/barreiras");
+  },
+  criarBarreira(descricao: string): Promise<Barreira> {
+    return http("/barreiras", {
+      method: "POST",
+      body: JSON.stringify({ descricao }),
+    });
+  },
+  listarSubtipos(): Promise<SubtipoDeficiencia[]> {
+    return http("/subtipos");
+  },
+  vincularBarreirasASubtipo(subtipoId: number, barreiraIds: number[]) {
+    return http(`/vinculos/subtipos/${subtipoId}/barreiras`, {
+      method: "POST",
+      body: JSON.stringify({ barreiraIds }),
     });
   },
 

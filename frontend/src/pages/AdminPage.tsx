@@ -28,6 +28,14 @@ export default function AdminPage() {
             >
               Subtipos
             </NavLink>
+            <NavLink
+              to="/admin/barreiras"
+              className={({ isActive }) =>
+                `${linkBase} ${isActive ? linkActive : ""}`
+              }
+            >
+              Barreiras
+            </NavLink>
           </nav>
         </div>
       </header>

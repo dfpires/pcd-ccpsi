@@ -1,3 +1,11 @@
+export type Barreira = {
+  id: number;
+  descricao: string;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+
 export type TipoDeficiencia = {
   id: number;
   nome: string;
